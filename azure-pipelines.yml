@@ -1,52 +1,19 @@
-# ASP.NET Core (.NET Framework) Pipeline
-# This pipeline builds and tests an ASP.NET Core project targeting the full .NET Framework.
-
 trigger:
-  - main
+  - main  # Change branch name if needed
 
 pool:
-  vmImage: 'windows-latest'
-
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  vmImage: 'ubuntu-latest'  # You can use 'windows-latest' as well
 
 steps:
-  # Install NuGet
-  - task: NuGetToolInstaller@1
-
-  # Restore NuGet packages
-  - task: NuGetCommand@2
+  - task: UseDotNet@2
     inputs:
-      command: 'restore'
-      restoreSolution: '$(solution)'
+      packageType: 'sdk'
+      version: '6.x'  # Choose .NET version if needed
 
-  # Build Solution
-  - task: VSBuild@1
-    inputs:
-      solution: '$(solution)'
-      msbuildArgs: >
-        /p:DeployOnBuild=true 
-        /p:WebPublishMethod=Package 
-        /p:PackageAsSingleFile=true 
-        /p:SkipInvalidConfigurations=true 
-        /p:DesktopBuildPackageLocation="$(Build.ArtifactStagingDirectory)/WebApp.zip" 
-        /p:DeployIisAppPath="Default Web Site"
-      platform: '$(buildPlatform)'
-      configuration: '$(buildConfiguration)'
+  - script: echo "Running Pipeline for $(Build.SourceBranch)"
+    displayName: 'Print Branch Info'
 
-  # Run Unit Tests
-  - task: VSTest@2
+  - task: DotNetCoreCLI@2
     inputs:
-      testSelector: 'testAssemblies'
-      testAssemblyVer2: '**\*test*.dll'
-      platform: '$(buildPlatform)'
-      configuration: '$(buildConfiguration)'
-
-  # Publish Build Artifacts
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: 'drop'
-      publishLocation: 'Container'
+      command: 'build'
+      projects: '**/*.csproj'
