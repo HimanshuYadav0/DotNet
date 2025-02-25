@@ -1,7 +1,7 @@
 # Azure Pipelines for ASP.NET Web Forms (Master Page) Application
 - task: DotNetCoreCLI@2
   inputs:
-    azureSubscription: 's1'
+    azureSubscription: 'Azure for Students(cf3738c7-78ed-4011-a593-7b552fb49ba2)'
     command: 'build'
 
 trigger:
