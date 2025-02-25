@@ -1,4 +1,8 @@
 # Azure Pipelines for ASP.NET Web Forms (Master Page) Application
+- task: DotNetCoreCLI@2
+  inputs:
+    azureSubscription: 's1'
+    command: 'build'
 
 trigger:
   - main  # Runs on changes to the main branch
