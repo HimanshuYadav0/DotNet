@@ -1,0 +1,16 @@
+trigger:
+- main  # Ensure the trigger is properly formatted
+
+pool:
+  vmImage: 'ubuntu-latest'  # Indentation must be correct
+
+stages:
+- stage: Build  # Ensure '-' is present before 'stage'
+  jobs:
+  - job: BuildJob
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
+    - script: echo "Building project..."
